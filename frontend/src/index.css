@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+/* ─── Design Tokens (Electric Cobalt) ────────────────────────────────────────── */
+:root {
+  --nav-bg: #0f1629;
+  --nav-border: #1e2d4f;
+  --nav-text: #8b9dc3;
+  --nav-text-active: #ffffff;
+  --nav-active-bg: rgba(59, 130, 246, 0.15);
+  --nav-active-border: #3b82f6;
+
+  --page-bg: #eef2fb;
+  --surface: #ffffff;
+  --surface-alt: #f4f7fd;
+  --surface-border: #dde4f0;
+
+  --cobalt: #2563eb;
+  --cobalt-light: #3b82f6;
+  --cobalt-dark: #1d4ed8;
+  --cobalt-muted: #dbeafe;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+
+  --status-pending-bg: #eef2ff;
+  --status-pending-text: #4338ca;
+  --status-review-bg: #eff6ff;
+  --status-review-text: #1d4ed8;
+  --status-escalated-bg: #fffbeb;
+  --status-escalated-text: #b45309;
+  --status-approved-bg: #ecfdf5;
+  --status-approved-text: #065f46;
+  --status-rejected-bg: #fef2f2;
+  --status-rejected-text: #991b1b;
+  --status-hold-bg: #f5f3ff;
+  --status-hold-text: #6d28d9;
+
+  --severity-critical: #dc2626;
+  --severity-major: #d97706;
+  --severity-minor: #2563eb;
+}
+
+/* ─── Base ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--page-bg);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+/* ─── Scrollbars ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1cde8;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ─── App layout ──────────────────────────────────────────────────────────── */
+#root {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ─── Transitions ─────────────────────────────────────────────────────────── */
+.transition-fast {
+  transition: all 0.15s ease;
+}
+
+/* ─── Mono font for IDs ───────────────────────────────────────────────────── */
+.font-mono {
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
+}
+
+/* ─── Prose clamp helpers ─────────────────────────────────────────────────── */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

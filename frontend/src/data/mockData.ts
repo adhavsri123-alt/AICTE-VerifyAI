@@ -1,0 +1,506 @@
+import type {
+  Submission,
+  DashboardMetrics,
+  AuditEvent,
+  ReviewerProfile,
+  PipelineStage,
+} from '../types';
+import {
+  mockNorthstarContent,
+  mockNorthstarCrossDocComparisons,
+  mockNorthstarReviewerNotes,
+} from './reviewMockDetails';
+
+// ─── Reviewer ─────────────────────────────────────────────────────────────────
+
+export const mockReviewer: ReviewerProfile = {
+  id: 'rev-001',
+  name: 'Priya Venkataraman',
+  role: 'Senior Compliance Reviewer',
+  avatarInitials: 'PV',
+  assignedCount: 12,
+  resolvedThisMonth: 34,
+};
+
+// ─── Submissions (Synthetic Demo Tier) ─────────────────────────────────────────
+// IMPORTANT ETHICAL NOTICE:
+// All submissions, findings, risk scores, and discrepancies below are strictly
+// synthetic demo cases. No invented violations are ever attached to real institutions.
+
+export const mockSubmissions: Submission[] = [
+  {
+    id: 'sub-001',
+    applicationId: 'DEMO/2024-25/NPA/KA/001842',
+    isSyntheticDemo: true,
+    institution: {
+      id: 'inst-001',
+      name: 'Northstar Institute of Technology',
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      type: 'college',
+      aicteId: 'DEMO-KA-ENG-2015-88',
+      isSyntheticDemo: true,
+    },
+    submittedAt: '2024-11-02T09:15:00Z',
+    updatedAt: '2024-11-18T14:30:00Z',
+    status: 'escalated',
+    category: 'New Program Approval — B.Tech AI & DS',
+    assignedTo: 'Priya Venkataraman',
+    dueDate: '2024-11-25T00:00:00Z',
+    priorityScore: 91,
+    findings: [
+      {
+        id: 'fnd-001a',
+        severity: 'critical',
+        category: 'Faculty Cadre & Doctoral Ratio',
+        description:
+          'Cadre imbalance: Proposed department lacks required domain-relevant doctoral qualifications for core cadre posts (Dr. P. Sangeetha Ph.D. is in Mechanical Engineering).',
+        flaggedAt: '2024-11-10T11:00:00Z',
+        ruleOrCheck:
+          'AICTE Approval Process Handbook (APH) 2024–2027, §6.14 and Annexure 5 (Specifically Annexure 5.2: UG Engineering & Technology TSR 1:20 & Cadre 1:2:6)',
+        reason:
+          'Under AICTE APH 2024–2027, §6.14 and Annexure 5.2 (Table for Degree Engineering and Technology), the prescribed teacher-to-student ratio is 1:20 with a cadre ratio of Professor : Associate Professor : Assistant Professor = 1 : 2 : 6. AICTE regulations mandate an awarded Ph.D. degree in the relevant/appropriate discipline specifically for Professor and Associate Professor posts (entry-level Assistant Professors require Master\'s degree with First Class). Dr. P. Sangeetha’s doctorate is in Mechanical Engineering ("Dynamic Thermal Dissipation"), leaving the proposed AI & DS department deficient in mandated computing doctoral leadership for its Associate Professor post.',
+        documentId: 'ev-001c',
+        documentName: 'DEMO_Faculty_Dossier_Northstar_AI_DS.pdf',
+        pageNumber: 3,
+        highlightSnippetId: 'snip-faculty-01',
+        reviewerNextStep:
+          'Issue formal clarification query to registrar requiring submission of computing doctoral award certificates or consider provisional restriction of intake to 30 seats.',
+      },
+      {
+        id: 'fnd-001b',
+        severity: 'major',
+        category: 'Lab Inventory Reconciliation (Synthetic Demo Rule)',
+        description:
+          'Submitted GPU lab inventory declaration (30 workstations) mismatches physical on-site inspection (16 verified operational; 14 unaccounted for).',
+        flaggedAt: '2024-11-12T09:30:00Z',
+        ruleOrCheck:
+          'Synthetic demo rule: Institutional Lab Specification & Inventory Reconciliation (Referenced alongside AICTE APH 2024–2027 §6.19 / Annexure 4)',
+        reason:
+          'Demo validation rule: Physical serial-number audit by Expert Visit Committee in Room CS-302 verified only 16 operational workstation units against the institution’s self-declared specification of 30 specialized workstations (with 14 unaccounted for without delivery challans). Note: High-performance GPU hardware is an institutional self-declaration checked under this demo validation rule, not an AICTE statutory mandate (AICTE APH 2024–2027 §6.19 and Annexure 4 prescribe departmental lab minimums of 20 PCs, centralized computer centre minimums of 100 PCs, and legal system/application software, rather than specific GPU hardware mandates).',
+        documentId: 'ev-001b',
+        documentName: 'DEMO_EVC_Physical_Inspection_Report_Northstar.pdf',
+        pageNumber: 2,
+        highlightSnippetId: 'snip-infra-01',
+        reviewerNextStep:
+          'Request OEM purchase orders, delivery challans, and physical asset register for the 14 unaccounted specialized workstations in Room CS-302. Schedule on-site re-inspection before commissioning.',
+      },
+      {
+        id: 'fnd-001c',
+        severity: 'minor',
+        category: 'Entity Legal Identity Reconciliation',
+        description:
+          'Entity name discrepancy: Land conveyance deed (1998) cites "Northstar Technical Institute" vs 2024 application "Northstar Institute of Technology".',
+        flaggedAt: '2024-11-15T16:00:00Z',
+        ruleOrCheck:
+          'AICTE Approval Process Handbook (APH) 2024–2027, §6.17 and Annexure 1 (Land Requirements, Lawful Title & Encumbrance Status)',
+        reason:
+          'Under AICTE APH 2024–2027, §6.17 and Annexure 1, the applicant entity must hold lawful possession of continuous land with clear marketable title and submit a valid Encumbrance Certificate (EC) verifying freedom from unrecorded liabilities or unauthorized attachments. The 1998 registered title deed was executed in favor of "Northstar Technical Institute" under Northstar Educational & Charitable Trust. A certified government gazette notification or trust resolution confirming legal continuity is required for final clearance.',
+        documentId: 'ev-001e',
+        documentName: 'DEMO_Registered_Land_Conveyance_Deed_Northstar.pdf',
+        pageNumber: 1,
+        highlightSnippetId: 'snip-land-01',
+        reviewerNextStep:
+          'Request certified copy of State Government gazette renaming order or registered trust deed amendment confirming continuity between "Northstar Technical Institute" (1998) and "Northstar Institute of Technology" (2024).',
+      },
+    ],
+    evidence: [
+      {
+        id: 'ev-001c',
+        type: 'document',
+        name: 'Faculty Qualification Dossier & Ph.D. Certificates (SAMPLE)',
+        filename: 'DEMO_Faculty_Dossier_Northstar_AI_DS.pdf',
+        description:
+          'Faculty roster and doctoral credential certificates; reviewed to verify statutory 1:2:6 cadre proportion, 1:20 teacher-student ratio, and domain-relevant doctoral qualifications.',
+        fileSizeBytes: 8740200,
+        fileSizeFormatted: '8.3 MB',
+        uploadedAt: '2024-11-02T09:25:00Z',
+        verificationStatus: 'pending',
+        issuer: 'Educational Scrutiny Desk (Simulated)',
+        checksumSha256: '9f8b4e2d7c1a89f3b5e4d2c1a89f7b6e5d4c3b2a19f8e7d6c5b4a3f2e1d0c9b8',
+        pageCount: 3,
+        findingIds: ['fnd-001a'],
+        content: mockNorthstarContent['ev-001c'],
+        notes: 'Discrepancy identified in doctoral specialisation for emerging technologies',
+      },
+      {
+        id: 'ev-001b',
+        type: 'inspection_report',
+        name: 'Expert Committee Physical Inspection Report (SAMPLE)',
+        filename: 'DEMO_EVC_Physical_Inspection_Report_Northstar.pdf',
+        description:
+          'On-site physical inspection report by the Expert Visit Committee; reviewed to verify computing labs, specialized equipment, and physical facilities against institutional self-declarations.',
+        fileSizeBytes: 4210000,
+        fileSizeFormatted: '4.0 MB',
+        uploadedAt: '2024-11-08T14:00:00Z',
+        verificationStatus: 'disputed',
+        issuer: 'Expert Inspection Panel (Simulated)',
+        checksumSha256: '3e7a1b9f2c8d4e5f6a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f',
+        pageCount: 2,
+        findingIds: ['fnd-001b'],
+        content: mockNorthstarContent['ev-001b'],
+        notes: 'On-site inventory audit noted 14 GPU workstations missing from Room CS-302',
+      },
+      {
+        id: 'ev-001e',
+        type: 'document',
+        name: 'Registered Land Conveyance Deed Extract (SAMPLE)',
+        filename: 'DEMO_Registered_Land_Conveyance_Deed_Northstar.pdf',
+        description:
+          'Certified extract of the registered land conveyance deed and revenue schedule; reviewed to verify continuous lawful possession, registered entity title, and encumbrance-free status.',
+        fileSizeBytes: 6150000,
+        fileSizeFormatted: '5.9 MB',
+        uploadedAt: '2024-11-02T09:30:00Z',
+        verificationStatus: 'verified',
+        issuer: 'Land Title Registry Desk (Simulated)',
+        checksumSha256: 'b4a8e2f1c9d03e5a7b6c8d1f2a3e4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a',
+        pageCount: 1,
+        findingIds: ['fnd-001c'],
+        content: mockNorthstarContent['ev-001e'],
+        notes: 'Land contiguous 23 Acres verified; name alias requires gazette reconciliation',
+      },
+      {
+        id: 'ev-001a',
+        type: 'approval_letter',
+        name: 'State Government NOC (SAMPLE)',
+        filename: 'DEMO_State_Govt_NOC_Karnataka_Northstar.pdf',
+        description:
+          'State Government No Objection Certificate issued by the Directorate of Technical Education; reviewed to confirm state territorial concurrence for the proposed program intake.',
+        fileSizeBytes: 1840000,
+        fileSizeFormatted: '1.8 MB',
+        uploadedAt: '2024-11-02T09:20:00Z',
+        verificationStatus: 'verified',
+        issuer: 'State Technical Directorate (Simulated)',
+        checksumSha256: '5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b',
+        pageCount: 1,
+        content: mockNorthstarContent['ev-001a'],
+        notes: 'State NOC cleared for 60 seats subject to AICTE Council approval',
+      },
+      {
+        id: 'ev-001d',
+        type: 'financial_report',
+        name: 'Audited Financial Statement FY 2023–24 (SAMPLE)',
+        filename: 'DEMO_Audited_Financial_Statement_Northstar.pdf',
+        description:
+          'Statutory chartered accountant report on balance sheet and fixed deposits; reviewed to verify financial stability and compliance with AICTE dedicated endowment reserve norms.',
+        fileSizeBytes: 3420000,
+        fileSizeFormatted: '3.3 MB',
+        uploadedAt: '2024-11-03T10:00:00Z',
+        verificationStatus: 'verified',
+        issuer: 'Statutory Auditor Desk (Simulated)',
+        checksumSha256: '7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d',
+        pageCount: 1,
+        content: mockNorthstarContent['ev-001d'],
+        notes: 'Statutory corpus reserves verified at INR 12.80 Crores',
+      },
+    ],
+    reviewNotes:
+      'Critical faculty doctoral shortfall and GPU workstation inventory mismatch must be resolved before any approval. Scheduled for hearing review.',
+    reviewerNotesList: mockNorthstarReviewerNotes,
+    crossDocComparisons: mockNorthstarCrossDocComparisons,
+  },
+  {
+    id: 'sub-002',
+    applicationId: 'DEMO/2024-25/ACF/MH/003317',
+    isSyntheticDemo: true,
+    institution: {
+      id: 'inst-002',
+      name: 'Zenith Institute of Engineering & Technology',
+      city: 'Pune',
+      state: 'Maharashtra',
+      type: 'college',
+      aicteId: 'DEMO-MH-ENG-2008-11',
+      isSyntheticDemo: true,
+    },
+    submittedAt: '2024-10-28T11:45:00Z',
+    updatedAt: '2024-11-19T10:00:00Z',
+    status: 'under_review',
+    category: 'Annual Compliance Filing',
+    assignedTo: 'Priya Venkataraman',
+    dueDate: '2024-12-01T00:00:00Z',
+    priorityScore: 68,
+    findings: [
+      {
+        id: 'fnd-002a',
+        severity: 'major',
+        category: 'Tuition Fee Disclosure',
+        description:
+          'Tuition fee adjustment not published on public portal 60 days prior as prescribed under disclosure guidelines.',
+        flaggedAt: '2024-11-14T13:00:00Z',
+        ruleOrCheck: 'Demo Validation Rule (Mandatory Public Fee Disclosure Norm)',
+      },
+    ],
+    evidence: [
+      {
+        id: 'ev-002a',
+        type: 'document',
+        name: 'Student Enrollment Report 2024–25 (SAMPLE)',
+        uploadedAt: '2024-10-28T11:50:00Z',
+        verificationStatus: 'verified',
+      },
+    ],
+  },
+  {
+    id: 'sub-003',
+    applicationId: 'DEMO/2024-25/EXT/TN/007891',
+    isSyntheticDemo: true,
+    institution: {
+      id: 'inst-003',
+      name: 'Apex Technical Academy',
+      city: 'Coimbatore',
+      state: 'Tamil Nadu',
+      type: 'college',
+      aicteId: 'DEMO-TN-ENG-1994-41',
+      isSyntheticDemo: true,
+    },
+    submittedAt: '2024-10-15T08:30:00Z',
+    updatedAt: '2024-11-20T09:00:00Z',
+    status: 'approved',
+    category: 'Intake Extension — MBA (60 seats)',
+    assignedTo: 'Ramesh Iyer',
+    dueDate: '2024-11-15T00:00:00Z',
+    priorityScore: 22,
+    findings: [],
+    evidence: [
+      {
+        id: 'ev-003a',
+        type: 'approval_letter',
+        name: 'State NOC (SAMPLE)',
+        uploadedAt: '2024-10-15T08:35:00Z',
+        verificationStatus: 'verified',
+      },
+    ],
+  },
+  {
+    id: 'sub-004',
+    applicationId: 'DEMO/2024-25/NPA/DL/002254',
+    isSyntheticDemo: true,
+    institution: {
+      id: 'inst-004',
+      name: 'Horizon Institute of Technology',
+      city: 'New Delhi',
+      state: 'Delhi',
+      type: 'university',
+      aicteId: 'DEMO-DL-ENG-2011-01',
+      isSyntheticDemo: true,
+    },
+    submittedAt: '2024-11-05T14:00:00Z',
+    updatedAt: '2024-11-20T11:30:00Z',
+    status: 'pending_review',
+    category: 'New Program Approval — M.Tech Robotics',
+    dueDate: '2024-12-10T00:00:00Z',
+    priorityScore: 55,
+    findings: [],
+    evidence: [
+      {
+        id: 'ev-004a',
+        type: 'document',
+        name: 'Detailed Project Report — Robotics M.Tech (SAMPLE)',
+        uploadedAt: '2024-11-05T14:10:00Z',
+        verificationStatus: 'pending',
+      },
+    ],
+  },
+  {
+    id: 'sub-005',
+    applicationId: 'DEMO/2024-25/ACF/RJ/005502',
+    isSyntheticDemo: true,
+    institution: {
+      id: 'inst-005',
+      name: 'Vanguard Institute of Engineering',
+      city: 'Jaipur',
+      state: 'Rajasthan',
+      type: 'university',
+      aicteId: 'DEMO-RJ-ENG-2009-03',
+      isSyntheticDemo: true,
+    },
+    submittedAt: '2024-10-20T10:00:00Z',
+    updatedAt: '2024-11-18T16:00:00Z',
+    status: 'on_hold',
+    category: 'Annual Compliance Filing',
+    assignedTo: 'Sunita Sharma',
+    dueDate: '2024-11-30T00:00:00Z',
+    priorityScore: 74,
+    findings: [
+      {
+        id: 'fnd-005a',
+        severity: 'critical',
+        category: 'Affiliation Validity',
+        description:
+          'State university affiliation renewal certificate not uploaded for current academic calendar.',
+        flaggedAt: '2024-11-01T10:00:00Z',
+        ruleOrCheck: 'AICTE Approval Process Handbook (APH) 2024–2027 Chapter I (Affiliation Prerequisites)',
+      },
+      {
+        id: 'fnd-005b',
+        severity: 'major',
+        category: 'Anti-Ragging Committee',
+        description: 'Mandatory external police/NGO representative missing from committee constitution proforma.',
+        flaggedAt: '2024-11-05T14:00:00Z',
+        ruleOrCheck: 'AICTE Regulations for Prevention and Prohibition of Ragging (2009 / 2024 Update)',
+      },
+    ],
+    evidence: [
+      {
+        id: 'ev-005a',
+        type: 'affidavit',
+        name: 'Anti-Ragging Affidavit (SAMPLE)',
+        uploadedAt: '2024-10-20T10:15:00Z',
+        verificationStatus: 'pending',
+      },
+    ],
+  },
+  {
+    id: 'sub-006',
+    applicationId: 'DEMO/2024-25/NPA/GJ/009103',
+    isSyntheticDemo: true,
+    institution: {
+      id: 'inst-006',
+      name: 'Summit Institute of Technology',
+      city: 'Ahmedabad',
+      state: 'Gujarat',
+      type: 'deemed',
+      aicteId: 'DEMO-GJ-ENG-2016-07',
+      isSyntheticDemo: true,
+    },
+    submittedAt: '2024-11-10T13:00:00Z',
+    updatedAt: '2024-11-20T14:00:00Z',
+    status: 'pending_review',
+    category: 'New Program Approval — B.Des Interaction Design',
+    dueDate: '2024-12-15T00:00:00Z',
+    priorityScore: 41,
+    findings: [],
+    evidence: [
+      {
+        id: 'ev-006a',
+        type: 'document',
+        name: 'Curriculum Framework — B.Des IxD (SAMPLE)',
+        uploadedAt: '2024-11-10T13:10:00Z',
+        verificationStatus: 'pending',
+      },
+    ],
+  },
+  {
+    id: 'sub-007',
+    applicationId: 'DEMO/2024-25/ACF/WB/006614',
+    isSyntheticDemo: true,
+    institution: {
+      id: 'inst-007',
+      name: 'Pinnacle Institute of Technology',
+      city: 'Kolkata',
+      state: 'West Bengal',
+      type: 'college',
+      aicteId: 'DEMO-WB-ENG-2010-52',
+      isSyntheticDemo: true,
+    },
+    submittedAt: '2024-10-25T09:00:00Z',
+    updatedAt: '2024-11-19T13:00:00Z',
+    status: 'rejected',
+    category: 'Annual Compliance Filing',
+    assignedTo: 'Ramesh Iyer',
+    dueDate: '2024-11-20T00:00:00Z',
+    priorityScore: 15,
+    findings: [
+      {
+        id: 'fnd-007a',
+        severity: 'critical',
+        category: 'Statutory Financial Audit',
+        description:
+          'Statutory audit report for prior financial year not submitted; persistent reporting non-compliance.',
+        flaggedAt: '2024-11-02T10:00:00Z',
+        ruleOrCheck: 'AICTE Approval Process Handbook (APH) 2024–2027 Chapter II (Financial Viability & Annual Returns)',
+      },
+    ],
+    evidence: [],
+    reviewNotes: 'Simulated decision: Application rejected due to unresolved financial audit submission.',
+  },
+];
+
+// ─── Metrics ──────────────────────────────────────────────────────────────────
+
+export const mockMetrics: DashboardMetrics = {
+  totalSubmissions: 847,
+  pendingReview: 124,
+  underReview: 38,
+  escalated: 9,
+  approvedThisMonth: 61,
+  rejectedThisMonth: 14,
+  avgResolutionDays: 18.4,
+  criticalFindings: 23,
+};
+
+// ─── Audit Events (Synthetic Demo Log) ─────────────────────────────────────────
+
+export const mockAuditEvents: AuditEvent[] = [
+  {
+    id: 'aud-001',
+    submissionId: 'sub-001',
+    applicationId: 'DEMO/2024-25/NPA/KA/001842',
+    institutionName: 'Northstar Institute of Technology',
+    action: 'escalated',
+    performedBy: 'Priya Venkataraman (Senior Compliance Reviewer)',
+    timestamp: '2024-11-18T14:30:00Z',
+    details: 'Escalated due to unresolved critical faculty cadre doctoral qualification finding.',
+  },
+  {
+    id: 'aud-002',
+    submissionId: 'sub-007',
+    applicationId: 'DEMO/2024-25/ACF/WB/006614',
+    institutionName: 'Pinnacle Institute of Technology',
+    action: 'decision_rejected',
+    performedBy: 'Ramesh Iyer (Reviewer)',
+    timestamp: '2024-11-19T13:00:00Z',
+    details: 'Simulated decision: Rejected — Outstanding financial audit non-compliance.',
+  },
+  {
+    id: 'aud-003',
+    submissionId: 'sub-003',
+    applicationId: 'DEMO/2024-25/EXT/TN/007891',
+    institutionName: 'Apex Technical Academy',
+    action: 'decision_approved',
+    performedBy: 'Priya Venkataraman (Senior Compliance Reviewer)',
+    timestamp: '2024-11-20T09:00:00Z',
+    details: 'MBA intake extension approved (Simulated) — all proformas cleared.',
+  },
+  {
+    id: 'aud-004',
+    submissionId: 'sub-002',
+    applicationId: 'DEMO/2024-25/ACF/MH/003317',
+    institutionName: 'Zenith Institute of Engineering & Technology',
+    action: 'finding_flagged',
+    performedBy: 'VerifyAI Automated Heuristic Engine',
+    timestamp: '2024-11-14T13:00:00Z',
+    details: 'Fee disclosure discrepancy heuristic flagged for human scrutiny.',
+  },
+  {
+    id: 'aud-005',
+    submissionId: 'sub-005',
+    applicationId: 'DEMO/2024-25/ACF/RJ/005502',
+    institutionName: 'Vanguard Institute of Engineering',
+    action: 'evidence_requested',
+    performedBy: 'Sunita Sharma (Reviewer)',
+    timestamp: '2024-11-18T16:00:00Z',
+    details: 'Clarification requested: Affiliation renewal certificate and committee proforma.',
+  },
+  {
+    id: 'aud-006',
+    submissionId: 'sub-004',
+    applicationId: 'DEMO/2024-25/NPA/DL/002254',
+    institutionName: 'Horizon Institute of Technology',
+    action: 'submission_received',
+    performedBy: 'Portal Ingestion Gateway',
+    timestamp: '2024-11-05T14:00:00Z',
+    details: 'Application dossier registered and queued for initial automated checks.',
+  },
+];
+
+// ─── Pipeline Stages ──────────────────────────────────────────────────────────
+
+export const mockPipelineStages: PipelineStage[] = [
+  { label: 'Pending Review', count: 124, color: '#6366f1' },
+  { label: 'Under Review', count: 38, color: '#3b82f6' },
+  { label: 'Escalated', count: 9, color: '#f59e0b' },
+  { label: 'On Hold', count: 17, color: '#8b5cf6' },
+  { label: 'Approved', count: 61, color: '#10b981' },
+  { label: 'Rejected', count: 14, color: '#ef4444' },
+];
