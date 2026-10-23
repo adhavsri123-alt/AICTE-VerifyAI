@@ -77,6 +77,7 @@ function App() {
           section={section}
           reviewer={reviewer}
           onOpenSourcesModal={() => setIsSourcesModalOpen(true)}
+          onOpenReviewWorkspace={setReviewingSubmissionId}
         />
         {renderPage()}
       </div>

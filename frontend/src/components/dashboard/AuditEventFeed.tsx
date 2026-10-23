@@ -1,6 +1,5 @@
 import React from 'react';
 import type { AuditEvent } from '../../types';
-import { timeAgo } from '../../utils/helpers';
 import {
   CheckCircle2,
   XCircle,
@@ -60,14 +59,26 @@ const ACTION_CONFIG: Record<
 
 interface AuditEventFeedProps {
   events: AuditEvent[];
+  helpTooltip?: React.ReactNode;
 }
 
-export const AuditEventFeed: React.FC<AuditEventFeedProps> = ({ events }) => {
+function formatEventDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-IN', {
+    day: '2-digit', month: 'short', year: 'numeric',
+  });
+}
+
+export const AuditEventFeed: React.FC<AuditEventFeedProps> = ({ events, helpTooltip }) => {
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-      <div className="px-5 py-4 border-b border-slate-100">
-        <h3 className="text-sm font-semibold text-slate-800">Recent Audit Events</h3>
-        <p className="text-xs text-slate-400 mt-0.5">System and reviewer actions</p>
+      <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+        <div>
+          <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-1.5">
+            Recent Audit Events
+            {helpTooltip}
+          </h3>
+          <p className="text-xs text-slate-400 mt-0.5">Simulated system and reviewer actions · demo data</p>
+        </div>
       </div>
 
       <div className="divide-y divide-slate-50">
@@ -93,7 +104,7 @@ export const AuditEventFeed: React.FC<AuditEventFeedProps> = ({ events }) => {
                     {event.institutionName}
                   </span>
                   <span className="text-[10px] text-slate-400 shrink-0 whitespace-nowrap">
-                    {timeAgo(event.timestamp)}
+                    {formatEventDate(event.timestamp)}
                   </span>
                 </div>
                 {event.details && (

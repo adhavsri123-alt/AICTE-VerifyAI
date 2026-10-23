@@ -137,10 +137,10 @@ export const LeftNav: React.FC<LeftNavProps> = ({
         style={{ borderTop: '1px solid var(--nav-border)' }}
       >
         <div className="text-[10px] font-medium" style={{ color: '#4a5d8a' }}>
-          SIH 2024 · Team NEXUS
+          AICTE VerifyAI · SIH Prototype
         </div>
         <div className="text-[10px] mt-0.5" style={{ color: '#2e3f63' }}>
-          Prototype v0.1
+          Synthetic demo — no real backend
         </div>
       </div>
     </aside>
