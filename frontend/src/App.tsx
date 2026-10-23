@@ -50,7 +50,12 @@ function App() {
 
     switch (section) {
       case 'overview':
-        return <OverviewPage onOpenReviewWorkspace={setReviewingSubmissionId} />;
+        return (
+          <OverviewPage
+            onOpenReviewWorkspace={setReviewingSubmissionId}
+            onNavigate={handleNavigate}
+          />
+        );
       case 'pipeline':
         return <PipelinePage onOpenReviewWorkspace={setReviewingSubmissionId} />;
       case 'action-queue':
@@ -60,7 +65,12 @@ function App() {
       case 'audit-events':
         return <AuditEventsPage />;
       default:
-        return <OverviewPage onOpenReviewWorkspace={setReviewingSubmissionId} />;
+        return (
+          <OverviewPage
+            onOpenReviewWorkspace={setReviewingSubmissionId}
+            onNavigate={handleNavigate}
+          />
+        );
     }
   };
 

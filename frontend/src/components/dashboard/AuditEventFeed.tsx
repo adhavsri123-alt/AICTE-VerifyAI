@@ -60,6 +60,8 @@ const ACTION_CONFIG: Record<
 interface AuditEventFeedProps {
   events: AuditEvent[];
   helpTooltip?: React.ReactNode;
+  maxEvents?: number;
+  onViewAll?: () => void;
 }
 
 function formatEventDate(iso: string): string {
@@ -68,7 +70,15 @@ function formatEventDate(iso: string): string {
   });
 }
 
-export const AuditEventFeed: React.FC<AuditEventFeedProps> = ({ events, helpTooltip }) => {
+export const AuditEventFeed: React.FC<AuditEventFeedProps> = ({
+  events,
+  helpTooltip,
+  maxEvents,
+  onViewAll,
+}) => {
+  const visible = maxEvents ? events.slice(0, maxEvents) : events;
+  const hidden = events.length - visible.length;
+
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
@@ -79,10 +89,19 @@ export const AuditEventFeed: React.FC<AuditEventFeedProps> = ({ events, helpTool
           </h3>
           <p className="text-xs text-slate-400 mt-0.5">Simulated system and reviewer actions · demo data</p>
         </div>
+        {onViewAll && (
+          <button
+            type="button"
+            onClick={onViewAll}
+            className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-0.5"
+          >
+            View all →
+          </button>
+        )}
       </div>
 
       <div className="divide-y divide-slate-50">
-        {events.map((event) => {
+        {visible.map((event) => {
           const cfg = ACTION_CONFIG[event.action] ?? {
             icon: <FileSearch size={12} />,
             color: 'text-slate-500',
@@ -125,6 +144,15 @@ export const AuditEventFeed: React.FC<AuditEventFeedProps> = ({ events, helpTool
             </div>
           );
         })}
+        {hidden > 0 && onViewAll && (
+          <button
+            type="button"
+            onClick={onViewAll}
+            className="w-full px-5 py-2.5 text-xs font-semibold text-blue-600 hover:text-blue-800 hover:bg-slate-50 transition-colors text-left flex items-center gap-1"
+          >
+            +{hidden} more event{hidden !== 1 ? 's' : ''} · View all →
+          </button>
+        )}
       </div>
     </div>
   );

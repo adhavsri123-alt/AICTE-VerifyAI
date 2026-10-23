@@ -7,7 +7,7 @@ import {
 } from '../services/api';
 import { mockPipelineStages } from '../data/mockData';
 import { MetricCard } from '../components/ui/MetricCard';
-import { PriorityCasePanel } from '../components/dashboard/PriorityCasePanel';
+import { CaseSummaryPanel } from '../components/dashboard/CaseSummaryPanel';
 import { PipelineProgress } from '../components/dashboard/PipelineProgress';
 import { AuditEventFeed } from '../components/dashboard/AuditEventFeed';
 import { HelpTooltip } from '../components/ui/HelpTooltip';
@@ -30,9 +30,9 @@ const DEMO_TIMELINE_LABEL = 'Demo timeline: November 2024';
 
 function LoadingRow() {
   return (
-    <div className="animate-pulse flex gap-4">
+    <div className="animate-pulse flex gap-3">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="h-24 bg-slate-100 rounded-xl flex-1" />
+        <div key={i} className="h-20 bg-slate-100 rounded-xl flex-1" />
       ))}
     </div>
   );
@@ -61,7 +61,7 @@ function PriorityRow({
       style={{
         width: '100%',
         textAlign: 'left',
-        padding: '10px 14px',
+        padding: '8px 12px',
         borderBottom: '1px solid #f1f5f9',
         background: isSelected ? '#eff6ff' : '#fff',
         display: 'flex',
@@ -75,11 +75,11 @@ function PriorityRow({
       {/* Rank badge */}
       <span
         style={{
-          width: 22, height: 22,
-          borderRadius: 6,
+          width: 20, height: 20,
+          borderRadius: 5,
           background: rank === 1 ? '#dc2626' : rank === 2 ? '#d97706' : '#1e40af',
           color: '#fff',
-          fontWeight: 700, fontSize: 11,
+          fontWeight: 700, fontSize: 10,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0,
         }}
@@ -139,7 +139,7 @@ function PriorityRow({
         <button
           type="button"
           onClick={(e) => { e.stopPropagation(); onOpenReviewWorkspace(sub.id); }}
-          className="flex items-center gap-0.5 text-[10px] text-blue-600 hover:text-blue-800 font-bold shrink-0 transition-colors"
+          className="flex items-center gap-0.5 text-[10px] text-blue-600 hover:text-blue-800 font-bold shrink-0 transition-colors p-1"
           title="Open full evidence dossier"
         >
           <ExternalLink size={11} />
@@ -151,9 +151,13 @@ function PriorityRow({
 
 interface OverviewPageProps {
   onOpenReviewWorkspace?: (id: string) => void;
+  onNavigate?: (section: any) => void;
 }
 
-export const OverviewPage: React.FC<OverviewPageProps> = ({ onOpenReviewWorkspace }) => {
+export const OverviewPage: React.FC<OverviewPageProps> = ({
+  onOpenReviewWorkspace,
+  onNavigate,
+}) => {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [auditEvents, setAuditEvents] = useState<AuditEvent[]>([]);
@@ -165,7 +169,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onOpenReviewWorkspac
     const [m, sr, ae] = await Promise.all([
       fetchDashboardMetrics(),
       fetchSubmissions(),
-      fetchAuditEvents(6),
+      fetchAuditEvents(8),
     ]);
     setMetrics(m);
     const sorted = [...sr.items].sort((a, b) => b.priorityScore - a.priorityScore);
@@ -184,21 +188,20 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onOpenReviewWorkspac
 
   return (
     <div className="flex-1 min-h-0 overflow-y-auto" style={{ background: 'var(--page-bg)' }}>
-      <div className="p-6 max-w-[1600px] mx-auto flex flex-col gap-6">
+      <div className="p-4 sm:p-5 max-w-[1550px] mx-auto flex flex-col gap-4">
 
         {/* ── Page heading ───────────────────────────────────────────────── */}
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-              <LayoutDashboard size={22} className="text-blue-600" />
+            <h1 className="text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+              <LayoutDashboard size={20} className="text-blue-600" />
               Control Room Overview
             </h1>
-            <p className="text-sm text-slate-500 mt-1 max-w-xl">
+            <p className="text-xs text-slate-500 mt-0.5 max-w-xl">
               Workload snapshot for this simulated compliance demo.{' '}
               <span className="font-medium text-slate-600">
                 Escalated cases and critical findings surface automatically.
-              </span>{' '}
-              Use <strong>Submission Pipeline</strong> for the full searchable list.
+              </span>
             </p>
           </div>
 
@@ -208,17 +211,17 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onOpenReviewWorkspac
               style={{
                 display: 'flex', alignItems: 'center', gap: 6,
                 background: '#fffbeb', border: '1px solid #fde68a',
-                borderRadius: 20, padding: '5px 10px',
+                borderRadius: 20, padding: '4px 9px',
               }}
             >
-              <FlaskConical size={12} className="text-amber-600" />
+              <FlaskConical size={11} className="text-amber-600" />
               <span className="text-[11px] font-semibold text-amber-700">
                 {DEMO_TIMELINE_LABEL}
               </span>
             </div>
-            <div className="flex items-center gap-2 bg-blue-600 text-white rounded-xl px-4 py-2.5 shadow-md">
-              <FileStack size={15} />
-              <span className="text-sm font-semibold">
+            <div className="flex items-center gap-2 bg-blue-600 text-white rounded-xl px-3.5 py-2 shadow-sm">
+              <FileStack size={14} />
+              <span className="text-xs font-semibold">
                 {loading ? '…' : metrics?.totalSubmissions} applications
               </span>
             </div>
@@ -229,13 +232,13 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onOpenReviewWorkspac
         {loading ? (
           <LoadingRow />
         ) : metrics ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <MetricCard
               label="Pending Review"
               value={metrics.pendingReview}
               subtext="Awaiting assignment"
               accentColor="text-indigo-700"
-              icon={<Clock size={16} />}
+              icon={<Clock size={15} />}
               trend="up"
               trendLabel="Demo count"
             />
@@ -244,7 +247,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onOpenReviewWorkspac
               value={metrics.escalated}
               subtext="Needs senior attention"
               accentColor="text-amber-600"
-              icon={<AlertTriangle size={16} />}
+              icon={<AlertTriangle size={15} />}
               trend="up"
               trendLabel="Demo count"
             />
@@ -253,7 +256,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onOpenReviewWorkspac
               value={metrics.approvedThisMonth}
               subtext="Applications cleared"
               accentColor="text-emerald-600"
-              icon={<CheckCircle2 size={16} />}
+              icon={<CheckCircle2 size={15} />}
               trend="neutral"
               trendLabel="Demo count"
             />
@@ -262,27 +265,27 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onOpenReviewWorkspac
               value={metrics.criticalFindings}
               subtext={`Avg. ${metrics.avgResolutionDays}d resolution`}
               accentColor="text-red-600"
-              icon={<XCircle size={16} />}
+              icon={<XCircle size={15} />}
               trend="down"
               trendLabel="Demo count"
             />
           </div>
         ) : null}
 
-        {/* ── Top priority cases + detail panel ─────────────────────────── */}
-        <div className="flex gap-5 items-start">
+        {/* ── Top priority cases + compact summary panel ─────────────────── */}
+        <div className="flex gap-4 items-start">
           {/* Left: top-5 cases list */}
           <div className="flex-1 min-w-0 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div
               style={{
-                padding: '14px 16px',
+                padding: '11px 14px',
                 borderBottom: '1px solid #f1f5f9',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               }}
             >
               <div>
-                <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                  <AlertTriangle size={14} className="text-red-500" />
+                <h3 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <AlertTriangle size={13} className="text-red-500" />
                   Highest-Priority Cases
                   <HelpTooltip
                     term="Priority"
@@ -290,31 +293,29 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onOpenReviewWorkspac
                     align="left"
                   />
                 </h3>
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[10px] text-slate-400 mt-0.5">
                   Top {topCases.length} by priority score · click to inspect · all DEMO data
                 </p>
               </div>
-              {onOpenReviewWorkspace && (
-                <button
-                  type="button"
-                  onClick={() => { /* navigate to pipeline — handled by nav */ }}
-                  className="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 transition-colors"
-                  title="Go to Submission Pipeline for the full list"
-                >
-                  <Building2 size={12} />
-                  Full list in Pipeline →
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => onNavigate?.('pipeline')}
+                className="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 transition-colors"
+                title="Go to Submission Pipeline for the full list"
+              >
+                <Building2 size={12} />
+                Full list in Pipeline →
+              </button>
             </div>
 
             {loading ? (
-              <div className="p-4 flex flex-col gap-2">
+              <div className="p-3 flex flex-col gap-2">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="animate-pulse h-12 bg-slate-100 rounded-lg" />
+                  <div key={i} className="animate-pulse h-10 bg-slate-100 rounded-lg" />
                 ))}
               </div>
             ) : topCases.length === 0 ? (
-              <div className="p-8 text-center text-slate-400 text-sm">
+              <div className="p-6 text-center text-slate-400 text-xs">
                 No submissions found in demo data.
               </div>
             ) : (
@@ -331,16 +332,15 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onOpenReviewWorkspac
             )}
           </div>
 
-          {/* Right: detail / priority panel */}
-          <div className="shrink-0" style={{ width: 340 }}>
+          {/* Right: compact selected-case summary panel */}
+          <div className="shrink-0" style={{ width: 360 }}>
             {selectedSubmission ? (
-              <PriorityCasePanel
+              <CaseSummaryPanel
                 submission={selectedSubmission}
-                onActionComplete={load}
                 onOpenReviewWorkspace={onOpenReviewWorkspace}
               />
             ) : (
-              <div className="bg-white rounded-xl border border-slate-200 p-6 text-center text-slate-400 text-sm">
+              <div className="bg-white rounded-xl border border-slate-200 p-6 text-center text-slate-400 text-xs">
                 Select a case above to view details
               </div>
             )}
@@ -348,13 +348,15 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onOpenReviewWorkspac
         </div>
 
         {/* ── Bottom row: pipeline snapshot + audit feed ─────────────────── */}
-        <div className="grid grid-cols-5 gap-5">
+        <div className="grid grid-cols-5 gap-4">
           <div className="col-span-2">
             <PipelineProgress stages={mockPipelineStages} total={totalPipeline} />
           </div>
           <div className="col-span-3">
             <AuditEventFeed
               events={auditEvents}
+              maxEvents={4}
+              onViewAll={() => onNavigate?.('audit-events')}
               helpTooltip={
                 <HelpTooltip
                   term="Audit events"
