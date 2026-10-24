@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import type { Submission } from '../types';
 import { fetchSubmissions } from '../services/api';
 import { PriorityCasePanel } from '../components/dashboard/PriorityCasePanel';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { SeverityBadge } from '../components/ui/SeverityBadge';
 import { formatDate, daysUntil } from '../utils/helpers';
-import { AlertTriangle, Clock, Building2 } from 'lucide-react';
+import { AlertTriangle, Clock, Building2, ExternalLink } from 'lucide-react';
 
 interface ActionQueuePageProps {
   onOpenReviewWorkspace?: (id: string) => void;
@@ -42,7 +42,7 @@ export const ActionQueuePage: React.FC<ActionQueuePageProps> = ({ onOpenReviewWo
           </p>
         </div>
 
-        <div className="flex gap-5 items-start">
+        <div className="flex flex-col lg:flex-row gap-5 items-start">
           {/* Queue list */}
           <div className="flex-1 min-w-0 flex flex-col gap-3">
             {loading ? (
@@ -108,9 +108,9 @@ export const ActionQueuePage: React.FC<ActionQueuePageProps> = ({ onOpenReviewWo
                             e.stopPropagation();
                             onOpenReviewWorkspace(sub.id);
                           }}
-                          className="ml-auto text-blue-600 hover:text-blue-800 text-xs font-bold hover:underline"
+                          className="ml-auto text-blue-600 hover:text-blue-800 text-xs font-bold hover:underline flex items-center gap-0.5"
                         >
-                          Review Dossier →
+                          Review Dossier <ExternalLink size={11} />
                         </div>
                       )}
                     </div>
@@ -120,8 +120,8 @@ export const ActionQueuePage: React.FC<ActionQueuePageProps> = ({ onOpenReviewWo
             )}
           </div>
 
-          {/* Detail */}
-          <div className="shrink-0" style={{ width: 340 }}>
+          {/* Detail panel */}
+          <div className="w-full lg:w-[380px] shrink-0">
             {selected ? (
               <PriorityCasePanel
                 submission={selected}

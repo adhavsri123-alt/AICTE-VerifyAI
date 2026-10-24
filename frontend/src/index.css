@@ -103,6 +103,12 @@ h2, h3 {
 #root {
   display: flex;
   min-height: 100vh;
+  width: 100%;
+}
+
+#root > div {
+  width: 100%;
+  flex: 1;
 }
 
 /* ─── Sidebar (Dramatic Noir Plum with Restrained Burgundy Lighting) ─────────── */
