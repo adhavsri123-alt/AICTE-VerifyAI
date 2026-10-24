@@ -1,7 +1,7 @@
 """Application configuration loaded from environment variables."""
-import os
-from __future__ import annotations
 
+from __future__ import annotations
+import os
 from pydantic_settings import BaseSettings
 
 
