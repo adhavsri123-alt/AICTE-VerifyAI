@@ -1,5 +1,5 @@
 """Application configuration loaded from environment variables."""
-
+import os
 from __future__ import annotations
 
 from pydantic_settings import BaseSettings
@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:3000,http://localhost:5173"
 
     # Document storage & upload limits
-    storage_dir: str = "./storage"
+    storage_dir: str = "/tmp/aicte-verifyai-storage" if os.getenv("VERCEL") else "./storage"
     max_upload_size_bytes: int = 10 * 1024 * 1024  # 10 MB default
 
     # OCR configuration
