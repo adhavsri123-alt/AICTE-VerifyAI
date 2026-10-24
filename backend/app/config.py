@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     app_port: int = 8000
 
     # Database
-    database_url: str = "sqlite:///./verifyai.db"
+    database_url: str = "sqlite:////tmp/aicte-verifyai.db" if os.getenv("VERCEL") else "sqlite:///./verifyai.db"
 
     # CORS — comma-separated list of allowed origins
     cors_origins: str = "http://localhost:3000,http://localhost:5173"
