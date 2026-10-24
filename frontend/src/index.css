@@ -1,48 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
-/* ─── Design Tokens (Electric Cobalt) ────────────────────────────────────────── */
+/* ─── Design Tokens: Cherry Blossom Noir ─────────────────────────────────────── */
 :root {
-  --nav-bg: #0f1629;
-  --nav-border: #1e2d4f;
-  --nav-text: #8b9dc3;
-  --nav-text-active: #ffffff;
-  --nav-active-bg: rgba(59, 130, 246, 0.15);
-  --nav-active-border: #3b82f6;
+  /* Sidebar / Dark Noir Palette */
+  --nav-bg: #1A0D18;
+  --nav-border: rgba(236, 217, 226, 0.08);
+  --nav-text: #AA91A3;
+  --nav-text-active: #FFFFFF;
+  --nav-active-bg: linear-gradient(135deg, rgba(193, 78, 131, 0.22) 0%, rgba(85, 34, 63, 0.45) 100%);
+  --nav-active-border: #C14E83;
 
-  --page-bg: #eef2fb;
-  --surface: #ffffff;
-  --surface-alt: #f4f7fd;
-  --surface-border: #dde4f0;
+  /* Main Canvas & Surface Tokens */
+  --page-bg: #FFF5F7;
+  --surface: #FFFAFC;
+  --surface-alt: #FDF2F6;
+  --surface-border: #ECD9E2;
 
-  --cobalt: #2563eb;
-  --cobalt-light: #3b82f6;
-  --cobalt-dark: #1d4ed8;
-  --cobalt-muted: #dbeafe;
+  /* Cherry Blossom Noir Accent Tokens */
+  --noir-plum: #251421;
+  --noir-deep: #100C15;
+  --plum-primary: #351D31;
+  --plum-accent: #55223F;
+  --berry-accent: #AA4777;
+  --cherry-rose: #C14E83;
+  --sakura-pale: #F8E5ED;
+  --mauve-muted: #896F81;
+  --mauve-subtle: #A892A2;
+  --border-soft: #ECD9E2;
 
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  /* Primary Typography Colors */
+  --text-primary: #351D31;
+  --text-secondary: #896F81;
+  --text-muted: #A892A2;
 
-  --status-pending-bg: #eef2ff;
-  --status-pending-text: #4338ca;
-  --status-review-bg: #eff6ff;
-  --status-review-text: #1d4ed8;
-  --status-escalated-bg: #fffbeb;
-  --status-escalated-text: #b45309;
-  --status-approved-bg: #ecfdf5;
-  --status-approved-text: #065f46;
-  --status-rejected-bg: #fef2f2;
-  --status-rejected-text: #991b1b;
-  --status-hold-bg: #f5f3ff;
-  --status-hold-text: #6d28d9;
+  /* Status Colors (Distinct semantic clarity preserved) */
+  --status-pending-bg: #EEF2FF;
+  --status-pending-text: #3730A3;
+  --status-review-bg: #FCE8F3;
+  --status-review-text: #831843;
+  --status-escalated-bg: #FEF3C7;
+  --status-escalated-text: #92400E;
+  --status-approved-bg: #DEF7EC;
+  --status-approved-text: #065F46;
+  --status-rejected-bg: #FDE8E8;
+  --status-rejected-text: #9E1628;
+  --status-hold-bg: #F3E8FF;
+  --status-hold-text: #581C87;
 
-  --severity-critical: #dc2626;
-  --severity-major: #d97706;
-  --severity-minor: #2563eb;
+  --severity-critical: #9E1628;
+  --severity-major: #92400E;
+  --severity-minor: #831843;
 }
 
-/* ─── Base ─────────────────────────────────────────────────────────────────── */
+/* ─── Base Typography & Page Canvas ─────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -54,47 +65,536 @@ html {
 }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background-color: var(--page-bg);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #FFF5F7;
+  background-image:
+    radial-gradient(ellipse at 15% 10%, rgba(248, 229, 237, 0.5) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 85%, rgba(244, 213, 228, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 240, 246, 0.25) 0%, transparent 70%);
+  background-attachment: fixed;
   color: var(--text-primary);
   margin: 0;
   padding: 0;
   line-height: 1.5;
 }
 
-/* ─── Scrollbars ──────────────────────────────────────────────────────────── */
+/* ─── Elegant Editorial Typography ───────────────────────────────────────────── */
+h1, h2, h3, .font-serif, .heading-serif {
+  font-family: 'DM Serif Display', Georgia, serif;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+}
+
+h1 {
+  font-weight: 400;
+}
+
+h2, h3 {
+  font-weight: 400;
+}
+
+/* Monospace font for reference codes & IDs */
+.font-mono {
+  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
+  color: #6E4966;
+}
+
+/* ─── App Root Layout ────────────────────────────────────────────────────────── */
+#root {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+#root > div {
+  width: 100%;
+  flex: 1;
+}
+
+/* ─── Sidebar (Dramatic Noir Plum with Restrained Burgundy Lighting) ─────────── */
+aside {
+  background: linear-gradient(180deg, #251421 0%, #1A0D18 50%, #100C15 100%) !important;
+  border-right: 1px solid rgba(236, 217, 226, 0.08) !important;
+  box-shadow: inset -1px 0 0 rgba(236, 217, 226, 0.04), 2px 0 16px rgba(16, 12, 21, 0.25);
+  position: relative;
+  z-index: 50;
+}
+
+/* Restrained burgundy ambient lighting on the sidebar header */
+aside > div:first-child {
+  border-bottom: 1px solid rgba(236, 217, 226, 0.08) !important;
+  background: linear-gradient(180deg, rgba(85, 34, 63, 0.2) 0%, transparent 100%);
+}
+
+/* Logo badge */
+aside .w-8.h-8.rounded-lg.bg-blue-600 {
+  background: linear-gradient(135deg, #8A2F5B 0%, #C14E83 100%) !important;
+  box-shadow: 0 3px 12px rgba(193, 78, 131, 0.4) !important;
+}
+
+/* Section label in sidebar */
+aside span[style*="color: #4a5d8a"],
+aside span[style*="color: rgb(74, 93, 138)"] {
+  color: #9B7C93 !important;
+  letter-spacing: 0.12em !important;
+}
+
+/* Navigation items in sidebar */
+aside nav button {
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border-radius: 9px !important;
+}
+
+aside nav button:hover {
+  background: rgba(248, 229, 237, 0.07) !important;
+  color: #F8E5ED !important;
+}
+
+/* Active navigation item */
+aside nav button[style*="var(--nav-active-bg)"] {
+  background: linear-gradient(135deg, rgba(193, 78, 131, 0.25) 0%, rgba(85, 34, 63, 0.5) 100%) !important;
+  border-left: 3px solid #C14E83 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 10px rgba(193, 78, 131, 0.18);
+}
+
+aside nav button[style*="var(--nav-active-bg)"] span[style*="#3b82f6"],
+aside nav button[style*="var(--nav-active-bg)"] svg[style*="#3b82f6"] {
+  color: #F8E5ED !important;
+}
+
+/* Badges in sidebar */
+aside nav button span.rounded-full {
+  background: linear-gradient(135deg, #AA4777 0%, #8A2F5B 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 1px 4px rgba(138, 47, 91, 0.35);
+}
+
+/* Bottom footer in sidebar */
+aside div[style*="borderTop"],
+aside div[style*="border-top"] {
+  border-top: 1px solid rgba(236, 217, 226, 0.08) !important;
+}
+
+aside div[style*="color: #4a5d8a"],
+aside div[style*="color: #2e3f63"] {
+  color: #896F81 !important;
+}
+
+/* ─── TopBar (Soft Pearl-White with Blush Accents) ───────────────────────────── */
+header {
+  background: #FFFAFC !important;
+  border-bottom: 1px solid var(--border-soft) !important;
+  box-shadow: 0 1px 6px rgba(53, 29, 49, 0.03);
+}
+
+header h2 {
+  font-family: 'DM Serif Display', Georgia, serif !important;
+  color: #351D31 !important;
+  font-size: 1.15rem !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.01em !important;
+}
+
+header p {
+  color: #896F81 !important;
+}
+
+/* TopBar control buttons */
+header button.bg-blue-50 {
+  background: #FDF2F6 !important;
+  border-color: #ECD9E2 !important;
+  color: #8A2F5B !important;
+}
+
+header button.bg-blue-50:hover {
+  background: #F8E5ED !important;
+  border-color: #DDBDCF !important;
+}
+
+header button.bg-blue-50 svg {
+  color: #C14E83 !important;
+}
+
+header button.bg-amber-50 {
+  background: #FFF7F0 !important;
+  border-color: #F8DEC9 !important;
+}
+
+header button.bg-amber-50 span {
+  color: #9A4B1A !important;
+}
+
+header button.bg-amber-50 svg {
+  color: #B45309 !important;
+}
+
+/* TopBar Notification Bell */
+header button.bg-slate-50 {
+  background: #FFFAFC !important;
+  border-color: #ECD9E2 !important;
+  color: #55223F !important;
+}
+
+header button.bg-slate-50:hover {
+  background: #FDF2F6 !important;
+  border-color: #DDBDCF !important;
+  color: #351D31 !important;
+}
+
+header button span.bg-blue-600 {
+  background: linear-gradient(135deg, #AA4777 0%, #C14E83 100%) !important;
+  box-shadow: 0 2px 6px rgba(193, 78, 131, 0.4);
+}
+
+/* ─── Cards & Surfaces ──────────────────────────────────────────────────────── */
+.bg-white,
+div[style*="background: #fff"],
+div[style*="background:#fff"],
+div[style*="background: white"],
+div[style*="background:white"] {
+  background-color: var(--surface) !important;
+  border-color: var(--border-soft) !important;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(53, 29, 49, 0.035), 0 8px 24px rgba(53, 29, 49, 0.05);
+}
+
+.bg-slate-50 {
+  background-color: #FDF5F8 !important;
+}
+
+.bg-slate-100 {
+  background-color: #F8EBF1 !important;
+}
+
+/* Borders */
+.border-slate-200,
+.border-slate-100,
+div[style*="border: 1px solid #dde4f0"],
+div[style*="border:1px solid #dde4f0"],
+div[style*="border-bottom: 1px solid #f1f5f9"],
+div[style*="border-bottom:1px solid #f1f5f9"] {
+  border-color: var(--border-soft) !important;
+}
+
+/* ─── Metric Cards (Editorial Luxury) ───────────────────────────────────────── */
+.bg-white.rounded-xl.border.border-slate-200.p-5 {
+  background: #FFFAFC !important;
+  border: 1px solid var(--border-soft) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 10px rgba(53, 29, 49, 0.035), 0 6px 20px rgba(53, 29, 49, 0.04) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.bg-white.rounded-xl.border.border-slate-200.p-5:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(53, 29, 49, 0.06), 0 12px 28px rgba(85, 34, 63, 0.08) !important;
+  border-color: #DDBDCF !important;
+}
+
+/* Metric card number */
+.text-3xl.font-bold {
+  font-family: 'DM Serif Display', Georgia, serif !important;
+  color: var(--plum-primary) !important;
+  letter-spacing: -0.025em;
+  font-weight: 400 !important;
+  font-size: 2.15rem !important;
+  line-height: 1.1;
+}
+
+/* Metric card icon container */
+.w-9.h-9.rounded-lg.bg-blue-50 {
+  background: #FDF0F5 !important;
+  color: #AA4777 !important;
+  border: 1px solid rgba(193, 78, 131, 0.15);
+  border-radius: 10px !important;
+}
+
+/* ─── Primary Buttons (Plum-to-Berry Gradient) ───────────────────────────────── */
+button.bg-blue-600,
+.bg-blue-600 {
+  background: linear-gradient(135deg, #55223F 0%, #8A2F5B 50%, #AA4777 100%) !important;
+  border-color: #7A2850 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 3px 12px rgba(138, 47, 91, 0.28) !important;
+  border-radius: 10px;
+}
+
+button.bg-blue-600:hover,
+.bg-blue-600:hover {
+  background: linear-gradient(135deg, #441731 0%, #76234C 50%, #963B67 100%) !important;
+  box-shadow: 0 5px 18px rgba(138, 47, 91, 0.38) !important;
+}
+
+button.bg-blue-700,
+.bg-blue-700 {
+  background: #55223F !important;
+}
+
+/* Outline Buttons */
+button.border-slate-200,
+button.bg-white.text-slate-700 {
+  background: #FFFAFC !important;
+  border-color: var(--border-soft) !important;
+  color: #55223F !important;
+  border-radius: 10px;
+}
+
+button.border-slate-200:hover,
+button.bg-white.text-slate-700:hover {
+  background: #FDF2F6 !important;
+  border-color: #C14E83 !important;
+  color: #351D31 !important;
+}
+
+/* ─── Case Summary & Selected Signal Header ─────────────────────────────────── */
+div[style*="linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%)"],
+div[style*="linear-gradient(135deg,#1d4ed8 0%,#1e40af 100%)"],
+div[style*="linear-gradient(135deg,#0f1629,#1e2d4f)"],
+div[style*="linear-gradient(135deg, #0f1629, #1e2d4f)"] {
+  background: linear-gradient(135deg, #2D1427 0%, #55223F 55%, #AA4777 100%) !important;
+  box-shadow: 0 4px 16px rgba(53, 29, 49, 0.2) !important;
+}
+
+div[style*="linear-gradient"] span[style*="color: #93c5fd"],
+div[style*="linear-gradient"] span[style*="color: #bfdbfe"],
+div[style*="linear-gradient"] p[style*="color: #93c5fd"],
+div[style*="linear-gradient"] svg.text-blue-300 {
+  color: #F8E5ED !important;
+}
+
+/* Priority Row in Lists */
+button[style*="background: #eff6ff"],
+button[style*="background:#eff6ff"],
+div[style*="background: #eff6ff"] {
+  background: #FDF0F5 !important;
+  border-left-color: #C14E83 !important;
+}
+
+button[style*="border-left: 3px solid #2563eb"],
+button[style*="borderLeft: 3px solid #2563eb"] {
+  border-left: 3px solid #C14E83 !important;
+}
+
+/* ─── Filter Chips ───────────────────────────────────────────────────────────── */
+button.rounded-full.border {
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+button.rounded-full.border.bg-white {
+  background: #FFFAFC !important;
+  border-color: var(--border-soft) !important;
+  color: var(--mauve-muted) !important;
+}
+
+button.rounded-full.border.bg-white:hover {
+  background: #FDF5F8 !important;
+  border-color: var(--cherry-rose) !important;
+  color: var(--plum-primary) !important;
+}
+
+button.rounded-full.border.bg-blue-600 {
+  background: linear-gradient(135deg, #55223F 0%, #AA4777 100%) !important;
+  border-color: #8A2F5B !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(138, 47, 91, 0.25) !important;
+}
+
+/* ─── Status Badges (Strict Semantic Distinction & Contrast) ─────────────────── */
+/* Approved / Satisfied (Crisp Emerald) */
+.bg-emerald-50 {
+  background-color: #DEF7EC !important;
+  border: 1px solid #A7F3D0 !important;
+}
+.text-emerald-700 {
+  color: #065F46 !important;
+}
+.bg-emerald-400 {
+  background-color: #10B981 !important;
+}
+.text-emerald-600 {
+  color: #059669 !important;
+}
+
+/* Rejected / Critical (Rich Rose-Crimson) */
+.bg-red-50 {
+  background-color: #FDE8E8 !important;
+  border: 1px solid #FECACA !important;
+}
+.text-red-700,
+.text-red-600 {
+  color: #9E1628 !important;
+}
+.bg-red-400,
+.bg-red-500 {
+  background-color: #E02424 !important;
+}
+
+/* Escalated / Warning (Warm Amber-Ochre) */
+.bg-amber-50 {
+  background-color: #FEF3C7 !important;
+  border: 1px solid #FDE68A !important;
+}
+.text-amber-700,
+.text-amber-800 {
+  color: #92400E !important;
+}
+.bg-amber-400,
+.bg-amber-500 {
+  background-color: #D97706 !important;
+}
+
+/* Under Review / In Review (Deep Plum-Berry) */
+.bg-blue-50:not(button):not(.w-9) {
+  background-color: #FCE8F3 !important;
+  border: 1px solid #FBCFE8 !important;
+}
+.bg-blue-50:not(button):not(.w-9) .text-blue-700,
+.bg-blue-50:not(button):not(.w-9) .text-blue-800 {
+  color: #831843 !important;
+}
+.bg-blue-400 {
+  background-color: #C14E83 !important;
+}
+
+/* Pending Review (Muted Royal-Indigo) */
+.bg-indigo-50 {
+  background-color: #EEF2FF !important;
+  border: 1px solid #C7D2FE !important;
+}
+.text-indigo-700 {
+  color: #3730A3 !important;
+}
+.bg-indigo-400 {
+  background-color: #6366F1 !important;
+}
+
+/* On Hold (Soft Orchid-Purple) */
+.bg-purple-50 {
+  background-color: #F3E8FF !important;
+  border: 1px solid #DDD6FE !important;
+}
+.text-purple-700,
+.text-purple-800 {
+  color: #581C87 !important;
+}
+.bg-purple-400 {
+  background-color: #9333EA !important;
+}
+
+/* ─── Typography & Text Utility Overrides ─────────────────────────────────────── */
+.text-slate-900,
+.text-slate-800 {
+  color: #351D31 !important;
+}
+
+.text-slate-700,
+.text-slate-600 {
+  color: #55223F !important;
+}
+
+.text-slate-500 {
+  color: #896F81 !important;
+}
+
+.text-slate-400 {
+  color: #A892A2 !important;
+}
+
+.text-blue-600,
+.text-blue-700,
+.text-blue-800 {
+  color: #8A2F5B !important;
+}
+
+.hover\:text-blue-900:hover,
+.hover\:text-blue-800:hover {
+  color: #55223F !important;
+}
+
+/* ─── Tables (Refined Sakura Border & Pearl Surface) ─────────────────────────── */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+th {
+  background-color: #FAF0F4 !important;
+  color: #55223F !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.05em !important;
+  border-bottom: 1px solid var(--border-soft) !important;
+}
+
+td {
+  border-bottom: 1px solid #F4E8EE !important;
+  color: #351D31;
+}
+
+tr:hover td {
+  background-color: #FFF3F7 !important;
+}
+
+/* ─── Form Controls & Inputs ─────────────────────────────────────────────────── */
+input[type="text"],
+input[type="search"],
+input[type="email"],
+select,
+textarea {
+  background-color: #FFFAFC !important;
+  border: 1px solid var(--border-soft) !important;
+  border-radius: 9px !important;
+  color: #351D31 !important;
+  transition: all 0.15s ease;
+}
+
+input[type="text"]:focus,
+input[type="search"]:focus,
+input[type="email"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #C14E83 !important;
+  box-shadow: 0 0 0 3px rgba(193, 78, 131, 0.15) !important;
+  outline: none !important;
+}
+
+/* ─── Modals & Flyouts ───────────────────────────────────────────────────────── */
+div[style*="z-index: 200"],
+div[style*="zIndex: 200"],
+div[style*="z-index: 50"],
+div[style*="zIndex: 50"] {
+  border-color: var(--border-soft) !important;
+  box-shadow: 0 20px 50px rgba(37, 20, 33, 0.22) !important;
+}
+
+/* ─── Custom Scrollbars (Soft Mauve Rose) ─────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #c1cde8;
-  border-radius: 3px;
+  background: #E2C8D8;
+  border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #C19EB4;
 }
 
-/* ─── App layout ──────────────────────────────────────────────────────────── */
-#root {
-  display: flex;
-  min-height: 100vh;
-}
-
-/* ─── Transitions ─────────────────────────────────────────────────────────── */
+/* ─── Transitions & Helpers ─────────────────────────────────────────────────── */
 .transition-fast {
   transition: all 0.15s ease;
 }
 
-/* ─── Mono font for IDs ───────────────────────────────────────────────────── */
-.font-mono {
-  font-family: 'JetBrains Mono', 'Fira Mono', monospace;
-}
-
-/* ─── Prose clamp helpers ─────────────────────────────────────────────────── */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

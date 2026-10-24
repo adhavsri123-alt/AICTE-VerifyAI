@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import type { Submission } from '../types';
 import { fetchSubmissions } from '../services/api';
-import { PriorityCasePanel } from '../components/dashboard/PriorityCasePanel';
+import { PipelineDetailPanel } from '../components/dashboard/PipelineDetailPanel';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { HelpTooltip } from '../components/ui/HelpTooltip';
 import { InspectFindingModal } from '../components/common/InspectFindingModal';
@@ -198,7 +198,7 @@ export const PipelinePage: React.FC<PipelinePageProps> = ({ onOpenReviewWorkspac
         </div>
 
         {/* ── Content: table + detail panel ──────────────────────────────── */}
-        <div className="flex gap-5 items-start">
+        <div className="flex flex-col lg:flex-row gap-5 items-start">
           <div className="flex-1 min-w-0">
             {loading ? (
               <div className="animate-pulse h-72 bg-slate-100 rounded-xl" />
@@ -411,16 +411,17 @@ export const PipelinePage: React.FC<PipelinePageProps> = ({ onOpenReviewWorkspac
           </div>
 
           {/* Detail panel */}
-          <div className="shrink-0" style={{ width: 340 }}>
+          <div className="w-full lg:w-[380px] shrink-0">
             {selected ? (
-              <PriorityCasePanel
+              <PipelineDetailPanel
                 submission={selected}
-                onActionComplete={() => load(true)}
+                onClose={() => setSelectedId(null)}
                 onOpenReviewWorkspace={onOpenReviewWorkspace}
               />
             ) : (
-              <div className="bg-white rounded-xl border border-slate-200 p-6 text-center text-slate-400 text-sm">
-                Select a submission to view its detail panel
+              <div className="bg-white/80 rounded-xl border border-dashed border-slate-300 p-8 text-center text-slate-400 text-xs flex flex-col items-center justify-center gap-1.5 shadow-2xs">
+                <span className="font-medium text-slate-600 text-sm">No Application Selected</span>
+                <span>Select any row from the pipeline table to inspect compliance findings and evidence dossier</span>
               </div>
             )}
           </div>
