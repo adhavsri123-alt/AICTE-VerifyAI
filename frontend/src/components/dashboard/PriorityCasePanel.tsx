@@ -104,7 +104,7 @@ export const PriorityCasePanel: React.FC<PriorityCasePanelProps> = ({
   // Evidence counts
   const verifiedCount = submission.evidence.filter((e) => e.verificationStatus === 'verified').length;
   const disputedCount = submission.evidence.filter((e) => e.verificationStatus === 'disputed').length;
-  const pendingCount = submission.evidence.filter((e) => e.verificationStatus === 'unverified' || e.verificationStatus === 'missing').length;
+  const pendingCount = submission.evidence.filter((e) => e.verificationStatus === 'pending' || e.verificationStatus === 'missing').length;
 
   return (
     <>
@@ -234,7 +234,7 @@ export const PriorityCasePanel: React.FC<PriorityCasePanelProps> = ({
                         <span className="text-[11px] font-bold text-slate-800 truncate">
                           {finding.category}
                         </span>
-                        <SeverityBadge severity={finding.severity} size="sm" />
+                        <SeverityBadge severity={finding.severity} />
                       </div>
                       <p className="text-[11px] text-slate-700 leading-snug mb-2 line-clamp-3">
                         {finding.description}
