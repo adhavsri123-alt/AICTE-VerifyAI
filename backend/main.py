@@ -629,21 +629,19 @@ async def upload_application_document(
     ocr_status_msg = "Not required for digital PDF document."
     content_pages = []
 
-    # 1. Process PDF using PyMuPDF
+    # 1. Process PDF using PyMuPDF + Tesseract OCR fallback
     if ext_lower == ".pdf":
         try:
             pdf_data = extract_text_from_pdf(file_bytes)
             page_count = pdf_data["pageCount"]
             extracted_text = pdf_data["combinedText"]
             content_pages = pdf_data["pages"]
-
-            # If PDF has very few characters, attempt OCR on first page if available
-            if pdf_data["isScannedLikely"]:
-                ocr_used = True
-                has_tess, tess_msg = check_tesseract_engine_available()
-                ocr_status_msg = tess_msg
+            ocr_used = pdf_data.get("ocrUsed", False)
+            ocr_status_msg = pdf_data.get("ocrStatus", "Not required for digital PDF document.")
+        except ValueError as ve:
+            raise HTTPException(status_code=400, detail=str(ve))
         except Exception as e:
-            raise HTTPException(status_code=500, detail=f"PyMuPDF text extraction failed: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"PDF text extraction failed: {str(e)}")
 
     # 2. Process Image with Tesseract OCR (with graceful fallback)
     elif ext_lower in {".png", ".jpg", ".jpeg", ".tiff"}:
@@ -651,10 +649,13 @@ async def upload_application_document(
         ocr_text, ocr_success, ocr_msg = extract_text_with_ocr(file_bytes)
         extracted_text = ocr_text
         ocr_status_msg = ocr_msg
+        paragraphs = [p.strip() for p in ocr_text.splitlines() if len(p.strip()) > 10]
+        if not paragraphs and ocr_text.strip():
+            paragraphs = [ocr_text.strip()]
         content_pages = [{
             "pageNumber": 1,
             "text": ocr_text,
-            "paragraphs": [p.strip() for p in ocr_text.splitlines() if len(p.strip()) > 10],
+            "paragraphs": paragraphs,
         }]
 
     # Heuristic field extraction
@@ -753,7 +754,11 @@ async def upload_application_document(
         action="submission_received",
         performed_by="Reviewer / Document Intake Pipeline",
         timestamp=now_iso,
-        details=f"Document '{file.filename}' ({formatted_size}) uploaded. PyMuPDF extracted {len(extracted_text)} chars across {page_count} page(s). {len(added_findings)} advisory findings flagged.",
+        details=(
+            f"Document '{file.filename}' ({formatted_size}) uploaded. "
+            f"{'Tesseract OCR applied: ' + ocr_status_msg if ocr_used else 'Extracted native PDF text via PyMuPDF.'} "
+            f"Extracted {len(extracted_text)} chars across {page_count} page(s). {len(added_findings)} advisory findings flagged."
+        ),
     )
     db.add(audit_event)
 

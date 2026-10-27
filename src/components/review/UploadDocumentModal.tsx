@@ -9,9 +9,33 @@ import {
   Cpu,
   Info,
   Eye,
+  Scan,
+  ScanText,
 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { uploadApplicationDocument, type DocumentUploadResult } from '../../services/api';
+
+const FIELD_LABEL_MAP: Record<string, string> = {
+  institutionName: 'Institution Legal Name',
+  surveyNumber: 'Land Survey / Plot No.',
+  landArea: 'Campus Land Area',
+  landAreaMention: 'Land Area Citation',
+  applicationId: 'Application ID',
+  issuingAuthority: 'Issuing / Certifying Authority',
+  issueDate: 'Document Issue / Execution Date',
+  referenceNo: 'Reference / Order No.',
+  cadreMention: 'Faculty Cadre Ratio Declaration',
+  cadreRatio: 'Cadre Proportion (§6.14)',
+  aicteIdMention: 'Permanent AICTE Institute ID',
+};
+
+function formatFieldLabel(key: string): string {
+  if (FIELD_LABEL_MAP[key]) return FIELD_LABEL_MAP[key];
+  return key
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, (str) => str.toUpperCase())
+    .trim();
+}
 
 interface UploadDocumentModalProps {
   isOpen: boolean;
@@ -318,6 +342,69 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* Extracted Document Fields Card */}
+              {(() => {
+                const displayFieldsEntries = Object.entries(uploadResult.extractedFields || {}).filter(([key, val]) => {
+                  if (key === 'extractedFieldCount') return false;
+                  if (key === 'landAreaMention' && uploadResult.extractedFields.landArea) return false;
+                  return val !== null && val !== undefined && String(val).trim().length > 0;
+                });
+
+                return (
+                  <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-col gap-3 shadow-xs">
+                    <div className="flex items-center justify-between text-xs pb-2 border-b border-slate-100">
+                      <div className="flex items-center gap-1.5 font-bold text-slate-800 uppercase tracking-wide">
+                        <ScanText size={14} className="text-[#C14E83]" />
+                        <span>Extracted Document Fields</span>
+                        {displayFieldsEntries.length > 0 && (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] bg-[#FFF5F7] text-[#C14E83] border border-[#ECD9E2] font-semibold">
+                            {displayFieldsEntries.length} field{displayFieldsEntries.length > 1 ? 's' : ''} detected
+                          </span>
+                        )}
+                      </div>
+                      <div>
+                        {uploadResult.ocrUsed ? (
+                          <span className="px-2.5 py-0.5 text-[10.5px] font-semibold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center gap-1.5">
+                            <Scan size={11} className="text-indigo-600" />
+                            Tesseract OCR Processed
+                          </span>
+                        ) : (
+                          <span className="px-2.5 py-0.5 text-[10.5px] font-semibold rounded-full bg-slate-100 text-slate-700 border border-slate-200 flex items-center gap-1.5">
+                            <FileText size={11} className="text-slate-500" />
+                            PyMuPDF Digital Native
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {displayFieldsEntries.length === 0 ? (
+                      <div className="p-4 bg-slate-50/80 rounded-lg border border-dashed border-slate-200 text-center text-slate-500 text-xs">
+                        <p className="font-semibold text-slate-700">No structured fields extracted</p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">
+                          No explicit key fields (such as Survey Number, Land Area, or Application ID) were detected in the text layer.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-2.5">
+                        {displayFieldsEntries.map(([key, val]) => (
+                          <div
+                            key={key}
+                            className="p-2.5 rounded-lg bg-slate-50/70 border border-slate-200/80 flex flex-col gap-0.5"
+                          >
+                            <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">
+                              {formatFieldLabel(key)}
+                            </span>
+                            <div className="font-mono text-xs font-semibold text-slate-800 break-words select-all">
+                              {String(val)}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
 
               {/* Findings Raised Section */}
               <div className="flex flex-col gap-2">

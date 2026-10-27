@@ -531,8 +531,16 @@ export async function uploadApplicationDocument(
       checksumSha256: newDoc.checksumSha256!,
       pageCount: 1,
       ocrUsed: false,
-      ocrStatus: 'PyMuPDF digital extraction active.',
-      extractedFields: {},
+      ocrStatus: 'Simulated mode: Backend server currently unreachable. Native text and fields simulated.',
+      extractedFields: {
+        institutionName: sub.institution.name,
+        applicationId: sub.applicationId,
+        surveyNumber: '48/2',
+        landArea: '2.5 acres',
+        referenceNo: `SIM/2026/DOC-${Math.floor(Math.random() * 9000 + 1000)}`,
+        issueDate: new Date().toISOString().split('T')[0],
+        extractedFieldCount: 6,
+      },
       findingsRaised: [],
       newStatus: sub.status,
     };
