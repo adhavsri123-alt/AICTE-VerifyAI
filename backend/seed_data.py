@@ -28,12 +28,13 @@ def seed_reviewer_accounts(db: Session) -> None:
     If the var is not set, a safe development default is used.
     NEVER hardcode a production password here.
     """
-    demo_password = os.environ.get("VERIFYAI_DEMO_PASSWORD", "VerifyAI@Demo2026")
+    demo_password = os.environ.get("VERIFYAI_DEMO_PASSWORD", "VerifyAI@Adhav123!")
+    demo_email = os.environ.get("VERIFYAI_DEMO_EMAIL", "adhav.sri123@gmail.com")
 
     reviewers = [
         {
             "id": "rev-001",
-            "email": "priya.venkataraman@aicte-verifyai.demo",
+            "email": demo_email.strip().lower(),
             "password_hash": hash_password(demo_password),
             "name": "Priya Venkataraman",
             "role": "Senior Compliance Reviewer",
@@ -51,9 +52,18 @@ def seed_reviewer_accounts(db: Session) -> None:
             db.add(ReviewerModel(**r))
             print(f"[VerifyAI Auth] Created reviewer account: {r['email']}")
         else:
-            # Re-hash password in case the env var changed
+            # Re-hash password and update email if changed
+            existing.email = r["email"]
             existing.password_hash = r["password_hash"]
-            print(f"[VerifyAI Auth] Refreshed password hash for: {r['email']}")
+            print(f"[VerifyAI Auth] Refreshed credentials for: {r['email']}")
+
+    # Clean up any stale reviewer records that may have the old demo email
+    stale = db.query(ReviewerModel).filter(
+        ReviewerModel.email == "priya.venkataraman@aicte-verifyai.demo"
+    ).all()
+    for s in stale:
+        if s.id != "rev-001":
+            db.delete(s)
 
     db.commit()
 

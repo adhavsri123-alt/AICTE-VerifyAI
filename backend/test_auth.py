@@ -32,8 +32,8 @@ def test_auth_login_success():
     seed_reviewer_accounts(db)
     db.close()
 
-    demo_email = "priya.venkataraman@aicte-verifyai.demo"
-    demo_password = os.environ.get("VERIFYAI_DEMO_PASSWORD", "VerifyAI@Demo2026")
+    demo_email = "adhav.sri123@gmail.com"
+    demo_password = os.environ.get("VERIFYAI_DEMO_PASSWORD", "VerifyAI@Adhav123!")
 
     response = client.post(
         "/api/v1/auth/login",
@@ -46,13 +46,36 @@ def test_auth_login_success():
     assert "verifyai_token" in response.cookies
 
 def test_auth_login_invalid_password():
-    demo_email = "priya.venkataraman@aicte-verifyai.demo"
+    demo_email = "adhav.sri123@gmail.com"
     response = client.post(
         "/api/v1/auth/login",
         json={"email": demo_email, "password": "WrongPassword123"},
     )
     assert response.status_code == 401
     assert "verifyai_token" not in response.cookies
+
+def test_old_credentials_no_longer_work():
+    # Old email + old password must fail
+    resp1 = client.post(
+        "/api/v1/auth/login",
+        json={"email": "priya.venkataraman@aicte-verifyai.demo", "password": "VerifyAI@Demo2026"},
+    )
+    assert resp1.status_code == 401
+    assert "verifyai_token" not in resp1.cookies
+
+    # Old email + new password must fail
+    resp2 = client.post(
+        "/api/v1/auth/login",
+        json={"email": "priya.venkataraman@aicte-verifyai.demo", "password": "VerifyAI@Adhav123!"},
+    )
+    assert resp2.status_code == 401
+
+    # New email + old password must fail
+    resp3 = client.post(
+        "/api/v1/auth/login",
+        json={"email": "adhav.sri123@gmail.com", "password": "VerifyAI@Demo2026"},
+    )
+    assert resp3.status_code == 401
 
 def test_auth_login_unknown_user():
     response = client.post(
@@ -68,8 +91,8 @@ def test_auth_me_authenticated_and_unauthenticated():
     assert unauth_resp.status_code == 401
 
     # Login and verify /auth/me returns 200
-    demo_email = "priya.venkataraman@aicte-verifyai.demo"
-    demo_password = os.environ.get("VERIFYAI_DEMO_PASSWORD", "VerifyAI@Demo2026")
+    demo_email = "adhav.sri123@gmail.com"
+    demo_password = os.environ.get("VERIFYAI_DEMO_PASSWORD", "VerifyAI@Adhav123!")
     login_resp = fresh_client.post(
         "/api/v1/auth/login",
         json={"email": demo_email, "password": demo_password},
@@ -91,6 +114,7 @@ if __name__ == "__main__":
     test_token_generation_and_verification()
     test_auth_login_success()
     test_auth_login_invalid_password()
+    test_old_credentials_no_longer_work()
     test_auth_login_unknown_user()
     test_auth_me_authenticated_and_unauthenticated()
     print("ALL AUTH TESTS PASSED PERFECTLY!")

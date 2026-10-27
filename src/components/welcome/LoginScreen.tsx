@@ -453,7 +453,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onAuthenticated }) => 
                     value={email}
                     onChange={e => { setEmail(e.target.value); setError(null); }}
                     onBlur={() => setEmailTouched(true)}
-                    placeholder="reviewer@aicte-verifyai.demo"
+                    placeholder="adhav.sri123@gmail.com"
                     style={{
                       ...(emailError ? inputError : inputBase),
                       padding: '11px 14px 11px 40px',
