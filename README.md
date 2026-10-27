@@ -1,49 +1,32 @@
-# SIH26261 — AICTE VerifyAI
-## AI-Powered Application Validation, Document Authentication and Regulatory Compliance Verification
+# React + TypeScript + Vite
 
-AICTE VerifyAI automates the validation of institutional applications, authenticates supporting compliance documents, extracts key regulatory data, audits submissions against AICTE norms, screens for anomalies/tampering, and provides decision-support issuer verification, regulatory compliance assistance, and reviewer workflow queues.
+This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
----
+Currently, two official plugins are available:
 
-### Project Structure
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-- `backend/`: FastAPI backend service (Python 3.11+, SQLAlchemy 2.x, SQLite, PyMuPDF, Pytesseract).
-  - Documentation: [`backend/README.md`](file:///c:/Users/Namith%20Singh/OneDrive/Documents/SIH3RDATTEMPT/backend/README.md)
-  - Integration API Contract: [`backend/docs/api-contract.md`](file:///c:/Users/Namith%20Singh/OneDrive/Documents/SIH3RDATTEMPT/backend/docs/api-contract.md)
-- `frontend/`: React 19 + TypeScript + Vite frontend application (Lucide icons, Tailwind CSS).
-  - Documentation: [`frontend/README.md`](file:///c:/Users/Namith%20Singh/OneDrive/Documents/SIH3RDATTEMPT/frontend/README.md)
-- `docs/`: Full-stack integration architecture and API specifications.
-  - Integration Guide: [`docs/frontend-backend-integration.md`](file:///c:/Users/Namith%20Singh/OneDrive/Documents/SIH3RDATTEMPT/docs/frontend-backend-integration.md)
-  - API Contract: [`docs/api-contract.md`](file:///c:/Users/Namith%20Singh/OneDrive/Documents/SIH3RDATTEMPT/docs/api-contract.md)
+## React Compiler
 
----
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-### Quick Start Guide
+## Expanding the Oxlint configuration
 
-#### 1. Backend Service (FastAPI)
-```bash
-cd backend
-python -m venv venv
-# On Windows:
-.\venv\Scripts\activate
-# Install dependencies:
-pip install -r requirements.txt
-# Run automated test suite:
-python -m pytest -v
-# Start development server on port 8000:
-python -m uvicorn app.main:app --reload --port 8000
+If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+
+```json
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc"],
+  "options": {
+    "typeAware": true
+  },
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+  }
+}
 ```
-- Interactive Swagger UI: `http://localhost:8000/docs`
-- Health check: `http://localhost:8000/api/health`
 
-#### 2. Frontend Application (React + Vite)
-```bash
-cd frontend
-# Install dependencies:
-npm install
-# Build & verify type checking:
-npm run build
-# Start Vite development server on port 5173:
-npm run dev
-```
-- Web Application: `http://localhost:5173`
+See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
